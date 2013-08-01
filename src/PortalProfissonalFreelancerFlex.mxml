@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
-	             layout="absolute" height="817" width="1722" horizontalAlign="center" verticalAlign="top" fontFamily="Verdana" backgroundGradientAlphas="[1.0, 1.0]" backgroundGradientColors="[#F6F8F1, #F6F8F1]">	             
+	             layout="absolute" height="100%" width="1772" horizontalAlign="center" verticalAlign="top" fontFamily="Verdana" backgroundGradientAlphas="[1.0, 1.0]" 
+	             backgroundGradientColors="[#E5E69B, #1D474A]" x="50" y="21" borderColor="#59136D" color="#010209" borderStyle="none">	             
 	 <mx:RemoteObject id="registrarid" destination="RegistrarClienteFacade" fault="OnFault(event)">
 	  	<mx:method name="autenticarUsuario" result="OnResult(event)"/>
 	  	<mx:method name="autenticarUsuarioADM" result="OnResult(event)"/>
@@ -20,7 +21,7 @@
 			
 			//-- Tratando o set focus --//
 			import mx.events.CloseEvent;
-            import mx.managers.IFocusManagerComponent;
+            import mx.managers.IFocusManagerComponent;     
 			
 			//-- Tratando o set focus --//
 		    private var ignoreFocusChange:Boolean = false;
@@ -259,93 +260,97 @@
 					   	  this.txtOrcamentoNome.text  				= "";
 					   	  this.txtOrcamentoEmail.text 				= "";
 					   	  this.txtOrcamentoTelefone.text			= "";
-					   	  this.txtOrcamentoDescricaoProblema.text	= "";
-					   	  
+					   	  this.txtOrcamentoDescricaoProblema.text	= "";					   	  
 					 }		               
 	             }
 			 }
 			
 		]]> 
 	</mx:Script>
-	             
-	<mx:Panel x="77" y="10" width="386" height="789" layout="absolute" title="SELECIONE UMA DAS OPÇÕES" id="pMenuOpcoes">
-		<mx:Accordion x="0" y="10" width="345" height="729">
-			<mx:Canvas label="CRIAÇÃO DE SOFTWARE  - SOLICITE UM ORÇAMENTO" width="100%" height="100%" id="poOCAMENTO">
-				<mx:Label x="10" y="2" text="* - Nome:" fontWeight="bold" fontSize="12"/>
-				<mx:TextInput x="10" y="18" width="323" id="txtOrcamentoNome" maxChars="50"/>
-				<mx:Label x="10" y="44" text="* - E-Mail:" fontWeight="bold" fontSize="12"/>
-				<mx:TextInput x="10" y="60" width="323" id="txtOrcamentoEmail" maxChars="60"/>
-				<mx:Label x="10" y="87" text="* - Telefone:" fontWeight="bold" fontSize="12"/>
-				<mx:TextInput x="10" y="105" width="323" id="txtOrcamentoTelefone" maxChars="14"/>
-				<mx:Label x="10" y="130" text="* - Descreva o problema:" fontWeight="bold" fontSize="12"/>
-				<mx:TextArea x="10" y="150" width="323" height="458" id="txtOrcamentoDescricaoProblema" maxChars="600"/>
-				<mx:Button x="95.5" y="613" label="Salvar" width="152" id="btnSalvar" fontWeight="bold" fontSize="12" click="btnClick_SalvarOrcamento()"/>
+	<mx:VBox x="177" y="12" height="806">
+		<mx:Panel width="386" height="796" layout="absolute" title="SELECIONE UMA DAS OPÇÕES" id="pMenuOpcoes" borderColor="#E7F197">
+			<mx:Accordion x="10" y="10" width="345" height="732">
+				<mx:Canvas label="CRIAÇÃO DE SOFTWARE  - SOLICITE UM ORÇAMENTO" width="100%" height="100%" id="poOCAMENTO">
+					<mx:Label x="10" y="2" text="* - Nome:" fontWeight="bold" fontSize="12"/>
+					<mx:TextInput x="10" y="18" width="323" id="txtOrcamentoNome" maxChars="50"/>
+					<mx:Label x="10" y="44" text="* - E-Mail:" fontWeight="bold" fontSize="12"/>
+					<mx:TextInput x="10" y="60" width="323" id="txtOrcamentoEmail" maxChars="60"/>
+					<mx:Label x="10" y="87" text="* - Telefone:" fontWeight="bold" fontSize="12"/>
+					<mx:TextInput x="10" y="105" width="323" id="txtOrcamentoTelefone" maxChars="14"/>
+					<mx:Label x="10" y="130" text="* - Descreva o problema:" fontWeight="bold" fontSize="12"/>
+					<mx:TextArea x="10" y="150" width="323" height="458" id="txtOrcamentoDescricaoProblema" maxChars="600"/>
+					<mx:Button x="95.5" y="613" label="Salvar" width="152" id="btnSalvar" fontWeight="bold" fontSize="12" click="btnClick_SalvarOrcamento()" fillColors="[#051253, #580C0C]" color="#EFF0F6" fillAlphas="[1.0, 1.0, 1.0, 1.0]"/>
+				</mx:Canvas>
+				<mx:Canvas label="NOSSOS SERVIÇOS" width="100%" height="100%" id="pSERVICOS">    
+					<mx:SWFLoader x="10" y="10" scaleContent="true" autoLoad="true" source="img/nosos_servicos.gif"/>
+				</mx:Canvas>
+				<mx:Canvas label="PROJETOS DESENVOLVIDOS" width="100%" height="100%" id="pAplicacaoDesenvolvida" activate="true">
+					<mx:SWFLoader x="10" y="10" source="img/Projetos_realizados.gif" scaleContent="true" autoLoad="true"/>
+				</mx:Canvas>
+			</mx:Accordion>
+		</mx:Panel>
+	</mx:VBox>
+	<mx:VBox x="1111" y="10" height="812">
+		<mx:Panel height="179" layout="absolute" width="331" fontWeight="bold" title="ÁREA DO CLIENTE">
+			<mx:Label x="10" y="10" text="* - E-Mail:" fontSize="12"/>
+			<mx:TextInput x="10" y="28" width="291" id="txtEmail" maxChars="60"/>
+			<mx:Label x="10" y="58" text="* - Senha:" fontSize="13"/>
+			<mx:TextInput x="10" y="76" width="291" id="txtSenha" maxChars="20" displayAsPassword="true"/>
+			<mx:Button x="81" y="105" label="Entrar" width="138" fontSize="12" id="btnAutenticar" click="autenticarUsuario()" fillColors="[#051253, #580C0C]" color="#EFF0F6" fillAlphas="[1.0, 1.0, 1.0, 1.0]"></mx:Button>
+		</mx:Panel>
+		<mx:TabNavigator width="331" height="418" borderColor="#B7CB8D">
+			<mx:Canvas label="ENQUETE" width="100%" height="100%" id="pEnquete">   
+				<mx:Panel x="10" y="10" width="309" height="295" layout="absolute" title="Como você avalia o meu atendimento:" fontSize="12">
+					<mx:RadioButtonGroup id="radiogroup1"/>
+					<mx:RadioButton x="10" y="10" label="Excelente" groupName="radiogroup1" id="idExcelente" value="Excelente"/>
+					<mx:RadioButton x="10" y="36" label="Muito bom" groupName="radiogroup1" id="idMuitoBom" value="Muito Bom"/>
+					<mx:RadioButton x="10" y="62" label="Bom" groupName="radiogroup1" id="idBom" value="Bom"/>
+					<mx:RadioButton x="10" y="88" label="Moderado" groupName="radiogroup1" id="idModerado" value="Moderado"/>
+					<mx:RadioButton x="10" y="114" label="Ruim" groupName="radiogroup1" id="idRuim" value="Ruim"/>
+					<mx:Button x="82.5" y="157" label="Salvar" width="124" fontWeight="bold" id="btnEnqueteSalvar" click="btnEnquenteClick()" borderColor="#144A6F" fillAlphas="[1.0, 1.0]" 
+						fillColors="[#051253, #580C0C]" color="#EFF0F6"/>
+				</mx:Panel>
 			</mx:Canvas>
-			<mx:Canvas label="CHAT ON-LINE" width="100%" height="100%" id="pCHATONLINE">
+			<mx:Canvas label="REGISTRE-SE" width="100%" height="100%" id="pCadastrese">     
+				<mx:Label x="10" y="5" text="* - Nome completo:" fontWeight="bold" fontSize="12"/>
+				<mx:TextInput x="10" y="22" width="309" maxChars="50" id="txtCadastreseNomeCompleto"/>
+				<mx:Label x="10" y="48" text="* - E-Mail:" fontWeight="bold" fontSize="12"/>
+				<mx:TextInput x="10" y="64" width="309" maxChars="60" id="txtCadastreseEmail"/>
+				<mx:Label x="10" y="94" text="* - Telefone:" fontWeight="bold" fontSize="12"/>
+				<mx:TextInput x="10" y="112" width="309" id="txtCadastreseTelefone" maxChars="14"/>
+				<mx:Label x="10" y="142" text="Celular:" fontWeight="bold" fontSize="12"/>
+				<mx:TextInput x="10" y="159" width="309" id="txtCadastreseCelular" maxChars="14"/>
+				<mx:Label x="10" y="188" text="Skype:" fontWeight="bold" fontSize="12"/>
+				<mx:TextInput x="10" y="206" width="309" id="txtCadastreseSkype" maxChars="60"/>
+				<mx:Label x="10" y="236" text="* - Senha:" fontWeight="bold" fontSize="12"/>
+				<mx:TextInput x="10" y="254" width="309" id="txtCadastreseSenha" maxChars="20" displayAsPassword="true"/>
+				<mx:Label x="10" y="280" text="* - Confirmar senha:" fontWeight="bold" fontSize="12"/>
+				<mx:TextInput x="10" y="297" width="309" id="txtCadastreseConfirmarSenha" maxChars="20" displayAsPassword="true"/>
+				<mx:Button x="92" y="327" label="Salvar Registro" width="145" id="btnCadastrar" fontWeight="bold" fontSize="12" click="btnClick_RegistraSe()" fillColors="[#051253, #580C0C]" color="#EFF0F6" fillAlphas="[1.0, 1.0, 1.0, 1.0]"/>
 			</mx:Canvas>
-			<mx:Canvas label="PROFISSIONAL FREELANCER - MINI CURRÍCULO" width="100%" height="100%" id="pPROFISSIONALFREELANCERMINICURRICULO">
+			<mx:Canvas label="FALE CONOSCO" width="100%" height="100%" id="pFaleConosco">
+				<mx:Label x="10" y="10" text="* - Nome:" fontWeight="bold" fontSize="12"/>
+				<mx:TextInput x="10" y="27" width="309" id="txtFaleConoscoNome" maxChars="30"/>
+				<mx:Label x="10" y="57" text="* - Telefone:" fontWeight="bold" fontSize="12"/>
+				<mx:TextInput x="10" y="74" width="309" maxChars="14" id="txtFaleConoscoTelefone"/>
+				<mx:Label x="10" y="104" text="* - E-Mail:" fontWeight="bold" fontSize="12"/>
+				<mx:TextInput x="10" y="122" width="309" id="txtFaleConoscoEmail" maxChars="60"/>
+				<mx:Label x="10" y="152" text="* - Assunto:" fontWeight="bold" fontSize="12"/>
+				<mx:TextArea x="10" y="170" width="309" height="152" id="txtFaleConoscoAssunto"/>
+				<mx:Button x="73" y="330" label="Enviar" width="165" fontWeight="bold" id="btnFaleConoscoEnviar" fontSize="12" click="btnClick_EnviarFaleConosco()" fillColors="[#051253, #580C0C]" color="#EFF0F6" fillAlphas="[1.0, 1.0, 1.0, 1.0]"/>
 			</mx:Canvas>
-			<mx:Canvas label="TUTORIAIS E VÍDEO AULA" width="100%" height="100%" id="pTUTORIAIS">
-			</mx:Canvas>
-		</mx:Accordion>
-	</mx:Panel>
-	<mx:Panel y="10" height="179" layout="absolute" width="331" x="1334" fontWeight="bold" title="ÁREA DO CLIENTE">
-		<mx:Label x="10" y="10" text="* - E-Mail:" fontSize="12"/>
-		<mx:TextInput x="10" y="28" width="291" id="txtEmail" maxChars="60"/>
-		<mx:Label x="10" y="58" text="* - Senha:" fontSize="13"/>
-		<mx:TextInput x="10" y="76" width="291" id="txtSenha" maxChars="20" displayAsPassword="true"/>
-		<mx:Button x="81" y="105" label="Entrar" width="138" fontSize="12" id="btnAutenticar" click="autenticarUsuario()"></mx:Button>
-	</mx:Panel>
-	<mx:Panel x="1334" y="606" width="331" height="193" layout="absolute" title="ÁREA ADMINISTRATIVA - WEBDEVELOPER" id="btnAreaADM" click="autenticarUsuarioADM">
-		<mx:Label x="10" y="10" text="* - E-Mail:" fontWeight="bold" fontSize="12"/>
-		<mx:TextInput x="10" y="29" width="291" maxChars="60" id="txtEmailAdm"/>
-		<mx:Label x="10" y="63" text="* - Senha:" fontWeight="bold" fontSize="12"/>
-		<mx:TextInput x="10" y="83" width="291" id="txtSenhaADM" maxChars="20" displayAsPassword="true"/>
-		<mx:Button label="Entrar" width="135" fontWeight="bold" fontSize="12" click="autenticarUsuarioADM()" horizontalCenter="0" verticalCenter="52"/>
-	</mx:Panel>
-	<mx:TabNavigator x="1334" y="203" width="331" height="395">
-		<mx:Canvas label="ENQUETE" width="100%" height="100%" id="pEnquete">   
-			<mx:Panel x="10" y="10" width="309" height="295" layout="absolute" title="Como você avalia o meu atendimento:" fontSize="12">
-				<mx:RadioButtonGroup id="radiogroup1"/>
-				<mx:RadioButton x="10" y="10" label="Excelente" groupName="radiogroup1" id="idExcelente" value="Excelente"/>
-				<mx:RadioButton x="10" y="36" label="Muito bom" groupName="radiogroup1" id="idMuitoBom" value="Muito Bom"/>
-				<mx:RadioButton x="10" y="62" label="Bom" groupName="radiogroup1" id="idBom" value="Bom"/>
-				<mx:RadioButton x="10" y="88" label="Moderado" groupName="radiogroup1" id="idModerado" value="Moderado"/>
-				<mx:RadioButton x="10" y="114" label="Ruim" groupName="radiogroup1" id="idRuim" value="Ruim"/>
-				<mx:Button x="82.5" y="157" label="Salvar" width="124" fontWeight="bold" id="btnEnqueteSalvar" click="btnEnquenteClick()"/>
-			</mx:Panel>
-		</mx:Canvas>
-		<mx:Canvas label="REGISTRE-SE" width="100%" height="100%" id="pCadastrese">     
-			<mx:Label x="10" y="5" text="* - Nome completo:" fontWeight="bold" fontSize="12"/>
-			<mx:TextInput x="10" y="22" width="309" maxChars="50" id="txtCadastreseNomeCompleto"/>
-			<mx:Label x="10" y="48" text="* - E-Mail:" fontWeight="bold" fontSize="12"/>
-			<mx:TextInput x="10" y="64" width="309" maxChars="60" id="txtCadastreseEmail"/>
-			<mx:Label x="10" y="94" text="* - Telefone:" fontWeight="bold" fontSize="12"/>
-			<mx:TextInput x="10" y="112" width="309" id="txtCadastreseTelefone" maxChars="14"/>
-			<mx:Label x="10" y="142" text="Celular:" fontWeight="bold" fontSize="12"/>
-			<mx:TextInput x="10" y="159" width="309" id="txtCadastreseCelular" maxChars="14"/>
-			<mx:Label x="10" y="188" text="Skype:" fontWeight="bold" fontSize="12"/>
-			<mx:TextInput x="10" y="206" width="309" id="txtCadastreseSkype" maxChars="60"/>
-			<mx:Label x="10" y="236" text="* - Senha:" fontWeight="bold" fontSize="12"/>
-			<mx:TextInput x="10" y="254" width="309" id="txtCadastreseSenha" maxChars="20" displayAsPassword="true"/>
-			<mx:Label x="10" y="280" text="* - Confirmar senha:" fontWeight="bold" fontSize="12"/>
-			<mx:TextInput x="10" y="297" width="309" id="txtCadastreseConfirmarSenha" maxChars="20" displayAsPassword="true"/>
-			<mx:Button x="92" y="327" label="Salvar Registro" width="145" id="btnCadastrar" fontWeight="bold" fontSize="12" click="btnClick_RegistraSe()"/>
-		</mx:Canvas>
-		<mx:Canvas label="FALE CONOSCO" width="100%" height="100%" id="pFaleConosco">
-			<mx:Label x="10" y="10" text="* - Nome:" fontWeight="bold" fontSize="12"/>
-			<mx:TextInput x="10" y="27" width="309" id="txtFaleConoscoNome" maxChars="30"/>
-			<mx:Label x="10" y="57" text="* - Telefone:" fontWeight="bold" fontSize="12"/>
-			<mx:TextInput x="10" y="74" width="309" maxChars="14" id="txtFaleConoscoTelefone"/>
-			<mx:Label x="10" y="104" text="* - E-Mail:" fontWeight="bold" fontSize="12"/>
-			<mx:TextInput x="10" y="122" width="309" id="txtFaleConoscoEmail" maxChars="60"/>
-			<mx:Label x="10" y="152" text="* - Assunto:" fontWeight="bold" fontSize="12"/>
-			<mx:TextArea x="10" y="170" width="309" height="152" id="txtFaleConoscoAssunto"/>
-			<mx:Button x="73" y="330" label="Enviar" width="165" fontWeight="bold" id="btnFaleConoscoEnviar" fontSize="12" click="btnClick_EnviarFaleConosco()"/>
-		</mx:Canvas>
-	</mx:TabNavigator>
-	<mx:Panel x="471" y="10" width="855" height="789" layout="absolute" id="pTITULOPC" fontSize="11">
-		<mx:title>PROFISSIONAL FREELANCER - PAULO AUGUSTO - DESENVOLVIMENTO DE APLICATIVOS DESKTOP E PÁGINAS WEB</mx:title>
-	</mx:Panel>
+		</mx:TabNavigator>
+		<mx:Panel width="331" height="193" layout="absolute" title="ÁREA ADMINISTRATIVA - WEBDEVELOPER" id="btnAreaADM" click="autenticarUsuarioADM" borderColor="#9FA35F">
+			<mx:Label x="10" y="10" text="* - E-Mail:" fontWeight="bold" fontSize="12"/>
+			<mx:TextInput x="10" y="29" width="291" maxChars="60" id="txtEmailAdm"/>
+			<mx:Label x="10" y="63" text="* - Senha:" fontWeight="bold" fontSize="12"/>
+			<mx:TextInput x="10" y="83" width="291" id="txtSenhaADM" maxChars="20" displayAsPassword="true"/>
+			<mx:Button label="Entrar" width="135" fontWeight="bold" fontSize="12" click="autenticarUsuarioADM()" horizontalCenter="0" verticalCenter="52" fillColors="[#051253, #580C0C]" color="#EFF0F6" fillAlphas="[1.0, 1.0, 1.0, 1.0]"/>
+		</mx:Panel>
+	</mx:VBox>
+	<mx:VBox x="571" y="10" height="812" width="532">
+		<mx:Panel width="523" height="800" layout="absolute" id="pPrincipal" title="PROFISSIONA FREELANCER - PAULO AUGUSTO, TEL.: (61) 9119-4490" borderColor="#D1D284" themeColor="#093048">  
+		</mx:Panel>
+	</mx:VBox>
 	
 </mx:Application>
