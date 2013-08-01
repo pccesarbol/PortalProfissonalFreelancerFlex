@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	             layout="absolute" height="817" width="1722" horizontalAlign="center" verticalAlign="top" fontFamily="Verdana" backgroundGradientAlphas="[1.0, 1.0]" backgroundGradientColors="[#F6F8F1, #F6F8F1]">	             
+	 <mx:RemoteObject id="registrarid" destination="RegistrarClienteFacade" fault="OnFault(event)">
+	  	<mx:method name="autenticarUsuario" result="OnResult(event)"/>
+	  	<mx:method name="autenticarUsuarioADM" result="OnResult(event)"/>
+	  	<mx:method name="enviarFaleConosco" result="OnResult(event)"/>
+	  	<mx:method name="registrarNovoCliente" result="OnResult(event)"/>	
+	  	<mx:method name="salvarResultadoEnquete" result="OnResult(event)"/>
+	  	<mx:method name="salvarSolicitacaoOrcamento" result="OnResult(event)"/>
+	 </mx:RemoteObject>	  	
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.events.CloseEvent;
+			import mx.managers.FocusManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+			
+			//-- Tratando o set focus --//
+			import mx.events.CloseEvent;
+            import mx.managers.IFocusManagerComponent;
+			
+			//-- Tratando o set focus --//
+		    private var ignoreFocusChange:Boolean = false;
+            private var focusTargetOnReturn: IFocusManagerComponent;
+			
+			/**
+			 * Tratando o focus dos campos de alerta.
+			 * **/
+			private function myCloseHandler(event:CloseEvent):void
+	        {               
+	            ignoreFocusChange = true;
+	            focusManager.setFocus(focusTargetOnReturn);
+	            ignoreFocusChange = false;
+	        }	
+						
+			protected function OnResult(e:ResultEvent):void{
+			  Alert.show(e.result.toString());
+			}
+			
+			protected function OnFault(e:FaultEvent):void{
+			  Alert.show(e.fault.message.toString());
+			}
+			
+			/**
+			 * Realizar a autenticação na área do cliente
+			 * Autor: Paulo Augusto
+			 * Data: 29/07/2013 as 10hs04min
+			 * **/
+			protected function autenticarUsuario():void{
+				if(!ignoreFocusChange){	               
+	                
+	                 if(this.txtEmail.text.length < 10){
+					   	  focusManager.setFocus(txtEmail);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Informe o seu E-Mail é obrigatório ","", 0, null, myCloseHandler);
+					   	  			   	  
+					 }else if(this.txtSenha.text.length < 8){
+					 	  focusManager.setFocus(txtSenha);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Informe a sua Senha é obrigatório ","", 0, null, myCloseHandler);
+					   	  
+					 }else{ 	
+					   	  registrarid.autenticarUsuario(this.txtEmail.text, this.txtSenha.text);
+					   	  this.txtEmail.text   = "";
+					   	  this.txtSenha.text   = "";
+					 }		               
+	             }
+			}
+			
+			/**
+			 * Realizar a autenticação na área ADM.
+			 * Autor: Paulo Augusto
+			 * Data: 29/07/2013 as 16hs
+			 * **/
+			protected function autenticarUsuarioADM():void{
+				if(!ignoreFocusChange){	               
+	                
+	                 if(this.txtEmailAdm.text.length < 10){
+					   	  focusManager.setFocus(txtEmailAdm);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Informe o seu E-Mail é obrigatório ","", 0, null, myCloseHandler);
+					   	  			   	  
+					 }else if(this.txtSenhaADM.text.length < 8){
+					 	  focusManager.setFocus(txtSenhaADM);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Informe a sua Senha é obrigatório ","", 0, null, myCloseHandler);
+					   	  
+					 }else{ 	
+					   	  registrarid.autenticarUsuario(this.txtEmailAdm.text, this.txtSenhaADM.text);
+					   	  this.txtEmailAdm.text = "";
+					   	  this.txtSenhaADM.text = "";
+					 }		               
+	             }
+			}
+			
+			/**
+			 * Realizar ação Fale Conosco - os dados são guardados na base de dados MYSQL
+			 * Autor: Paulo Augusto
+			 * Data: 31/07/2013 as 10hs03min
+			 * **/
+			 protected function btnClick_EnviarFaleConosco():void{
+			    if(!ignoreFocusChange){	               
+	                
+	                 if(this.txtFaleConoscoNome.text.length < 3){
+					   	  focusManager.setFocus(txtFaleConoscoNome);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Informe o seu nome é obrigatório ","", 0, null, myCloseHandler);
+					   	  			   	  
+					 }else if(this.txtFaleConoscoTelefone.text.length < 8){
+					 	  focusManager.setFocus(txtFaleConoscoTelefone);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Informe o seu telefone é obrigatório ","", 0, null, myCloseHandler);
+					   	  
+					 }else if(this.txtFaleConoscoEmail.text.length < 8){
+					 	  focusManager.setFocus(txtFaleConoscoEmail);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Informe o seu e-mail é obrigatório ","", 0, null, myCloseHandler);
+					   	  
+					 }else if(this.txtFaleConoscoAssunto.text.length < 10){
+					 	  focusManager.setFocus(txtFaleConoscoAssunto);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Informe o assunto é obrigatório ","", 0, null, myCloseHandler);
+					   	  
+					 }else{ 	
+					   	  registrarid.enviarFaleConosco(this.txtFaleConoscoNome.text, this.txtFaleConoscoTelefone.text, this.txtFaleConoscoEmail.text, this.txtFaleConoscoAssunto.text);
+					   	  this.txtFaleConoscoNome.text 		= "";
+					   	  this.txtFaleConoscoTelefone.text  = "";
+					   	  this.txtFaleConoscoEmail.text     = "";
+					   	  this.txtFaleConoscoAssunto.text   = "";
+					 }		               
+	             }
+			 
+			 }
+			 
+			 /**
+			 * Registrar novo cliente no sistema
+			 * Autor: Paulo Augusto
+			 * Data: 11hs11min
+			 * **/
+			 protected function btnClick_RegistraSe():void{
+			    if(!ignoreFocusChange){	               
+	                
+	                 if(this.txtCadastreseNomeCompleto.text.length < 8){
+					   	  focusManager.setFocus(txtCadastreseNomeCompleto);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Informe o seu Nome completo é obrigatório ","", 0, null, myCloseHandler);
+					   	  			   	  
+					 }else if(this.txtCadastreseEmail.text.length < 8){
+					 	  focusManager.setFocus(txtCadastreseEmail);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Informe o seu E-Mail é obrigatório ","", 0, null, myCloseHandler);
+					   	  
+					 }else if(this.txtCadastreseTelefone.text.length < 8){
+					 	  focusManager.setFocus(txtCadastreseTelefone);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Informe o seu Telefone é obrigatório ","", 0, null, myCloseHandler);
+					   	  
+					 }else if(this.txtCadastreseSenha.text.length < 8){
+					 	  focusManager.setFocus(txtCadastreseSenha);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Informe a sua Senha é obrigatório ","", 0, null, myCloseHandler);
+					   	  
+					 }else if(this.txtCadastreseConfirmarSenha.text.length < 8){
+					 	  focusManager.setFocus(txtCadastreseConfirmarSenha);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Confirme a sua Senha é obrigatório ","", 0, null, myCloseHandler);
+					   	  
+					 }else{ 	
+					   	  registrarid.registrarNovoCliente(txtCadastreseNomeCompleto.text, txtCadastreseCelular.text, txtCadastreseConfirmarSenha.text,
+					   	                                   txtCadastreseEmail.text, txtCadastreseSenha.text, txtCadastreseSkype.text, txtCadastreseTelefone.text);					   	   
+					   	                                   
+					   	  txtCadastreseNomeCompleto.text 	= "";
+					   	  txtCadastreseCelular.text      	= "";
+					   	  txtCadastreseConfirmarSenha.text	= "";
+					   	  txtCadastreseEmail.text			= "";
+					   	  txtCadastreseSenha.text			= "";
+					   	  txtCadastreseSkype.text           = "";
+					   	  txtCadastreseTelefone.text        = ""; 
+					 }		               
+	             }
+			 }
+			 /**
+			 * Salvar pesquisa de satisfação enquete
+			 * Autor: Paulo Augusto
+			 * Data: 31/07/2013 as 12hs56min
+			 * **/
+			 protected function btnEnquenteClick():void{
+			    //-- Verificando se o radio foi marcado --//
+			    var valor:String   = "";
+			    var marcou:Boolean = false;
+			    
+				//-- Verificando qual item foi selecionado --//
+				if(idExcelente.selected){
+				   marcou = true;
+				   valor = idExcelente.value.toString();
+				}
+				if(idMuitoBom.selected){
+				   marcou = true;	
+				   valor = idMuitoBom.value.toString();
+				}
+				if(idBom.selected){
+				   marcou = true;	
+				   valor = idBom.value.toString();
+				}
+				if(idModerado.selected){
+				   marcou = true;	
+				   valor = idModerado.value.toString();
+				}
+				if(idRuim.selected){
+				   marcou = true;
+				   valor = idRuim.value.toString();
+				}
+				
+				//-- Verificando se alguma opção foi marcada --//
+			    if(!marcou){
+			       Alert.show("Atenção! Marque uma das opções é obrigatório");
+			    
+			    }else{
+			       //-- Salva a pesquisa na base de dados --//
+			       registrarid.salvarResultadoEnquete(valor);
+			    }
+			 }
+			 
+			 /**
+			 * Salvar solicitação de orçamento na base de dados
+			 * Autor: Paulo Augusto
+			 * Data: 31/07/2013 as 13hs48min
+			 * **/
+			 protected function btnClick_SalvarOrcamento():void{
+			    if(!ignoreFocusChange){	               
+	                
+	                 if(this.txtOrcamentoNome.text.length < 10){
+					   	  focusManager.setFocus(txtOrcamentoNome);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Informe o seu Nome Completo é obrigatório ","", 0, null, myCloseHandler);
+					   	  			   	  
+					 }else if(this.txtOrcamentoEmail.text.length < 8){
+					 	  focusManager.setFocus(txtOrcamentoEmail);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Informe o seu E-Mail é obrigatório ","", 0, null, myCloseHandler);
+					   	  
+					 }else if(this.txtOrcamentoTelefone.text.length < 8){
+					 	  focusManager.setFocus(txtOrcamentoTelefone);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Informe o seu Telefone é obrigatório ","", 0, null, myCloseHandler);
+					   	  
+					 }else if(this.txtOrcamentoDescricaoProblema.text.length < 8){
+					 	  focusManager.setFocus(txtOrcamentoDescricaoProblema);
+					 	  focusTargetOnReturn = focusManager.getFocus();
+					   	  Alert.show("Atenção! Informe a Descrição do Problema é obrigatório ","", 0, null, myCloseHandler);
+					   	  
+					 }else{ 	
+					   	  registrarid.salvarSolicitacaoOrcamento(this.txtOrcamentoNome.text, this.txtOrcamentoEmail.text, this.txtOrcamentoTelefone.text, 
+					   	                                         this.txtOrcamentoDescricaoProblema.text);
+					   	  					   	  
+					   	  this.txtOrcamentoNome.text  				= "";
+					   	  this.txtOrcamentoEmail.text 				= "";
+					   	  this.txtOrcamentoTelefone.text			= "";
+					   	  this.txtOrcamentoDescricaoProblema.text	= "";
+					   	  
+					 }		               
+	             }
+			 }
+			
+		]]> 
+	</mx:Script>
+	             
+	<mx:Panel x="77" y="10" width="386" height="789" layout="absolute" title="SELECIONE UMA DAS OPÇÕES" id="pMenuOpcoes">
+		<mx:Accordion x="0" y="10" width="345" height="729">
+			<mx:Canvas label="CRIAÇÃO DE SOFTWARE  - SOLICITE UM ORÇAMENTO" width="100%" height="100%" id="poOCAMENTO">
+				<mx:Label x="10" y="2" text="* - Nome:" fontWeight="bold" fontSize="12"/>
+				<mx:TextInput x="10" y="18" width="323" id="txtOrcamentoNome" maxChars="50"/>
+				<mx:Label x="10" y="44" text="* - E-Mail:" fontWeight="bold" fontSize="12"/>
+				<mx:TextInput x="10" y="60" width="323" id="txtOrcamentoEmail" maxChars="60"/>
+				<mx:Label x="10" y="87" text="* - Telefone:" fontWeight="bold" fontSize="12"/>
+				<mx:TextInput x="10" y="105" width="323" id="txtOrcamentoTelefone" maxChars="14"/>
+				<mx:Label x="10" y="130" text="* - Descreva o problema:" fontWeight="bold" fontSize="12"/>
+				<mx:TextArea x="10" y="150" width="323" height="458" id="txtOrcamentoDescricaoProblema" maxChars="600"/>
+				<mx:Button x="95.5" y="613" label="Salvar" width="152" id="btnSalvar" fontWeight="bold" fontSize="12" click="btnClick_SalvarOrcamento()"/>
+			</mx:Canvas>
+			<mx:Canvas label="CHAT ON-LINE" width="100%" height="100%" id="pCHATONLINE">
+			</mx:Canvas>
+			<mx:Canvas label="PROFISSIONAL FREELANCER - MINI CURRÍCULO" width="100%" height="100%" id="pPROFISSIONALFREELANCERMINICURRICULO">
+			</mx:Canvas>
+			<mx:Canvas label="TUTORIAIS E VÍDEO AULA" width="100%" height="100%" id="pTUTORIAIS">
+			</mx:Canvas>
+		</mx:Accordion>
+	</mx:Panel>
+	<mx:Panel y="10" height="179" layout="absolute" width="331" x="1334" fontWeight="bold" title="ÁREA DO CLIENTE">
+		<mx:Label x="10" y="10" text="* - E-Mail:" fontSize="12"/>
+		<mx:TextInput x="10" y="28" width="291" id="txtEmail" maxChars="60"/>
+		<mx:Label x="10" y="58" text="* - Senha:" fontSize="13"/>
+		<mx:TextInput x="10" y="76" width="291" id="txtSenha" maxChars="20" displayAsPassword="true"/>
+		<mx:Button x="81" y="105" label="Entrar" width="138" fontSize="12" id="btnAutenticar" click="autenticarUsuario()"></mx:Button>
+	</mx:Panel>
+	<mx:Panel x="1334" y="606" width="331" height="193" layout="absolute" title="ÁREA ADMINISTRATIVA - WEBDEVELOPER" id="btnAreaADM" click="autenticarUsuarioADM">
+		<mx:Label x="10" y="10" text="* - E-Mail:" fontWeight="bold" fontSize="12"/>
+		<mx:TextInput x="10" y="29" width="291" maxChars="60" id="txtEmailAdm"/>
+		<mx:Label x="10" y="63" text="* - Senha:" fontWeight="bold" fontSize="12"/>
+		<mx:TextInput x="10" y="83" width="291" id="txtSenhaADM" maxChars="20" displayAsPassword="true"/>
+		<mx:Button label="Entrar" width="135" fontWeight="bold" fontSize="12" click="autenticarUsuarioADM()" horizontalCenter="0" verticalCenter="52"/>
+	</mx:Panel>
+	<mx:TabNavigator x="1334" y="203" width="331" height="395">
+		<mx:Canvas label="ENQUETE" width="100%" height="100%" id="pEnquete">   
+			<mx:Panel x="10" y="10" width="309" height="295" layout="absolute" title="Como você avalia o meu atendimento:" fontSize="12">
+				<mx:RadioButtonGroup id="radiogroup1"/>
+				<mx:RadioButton x="10" y="10" label="Excelente" groupName="radiogroup1" id="idExcelente" value="Excelente"/>
+				<mx:RadioButton x="10" y="36" label="Muito bom" groupName="radiogroup1" id="idMuitoBom" value="Muito Bom"/>
+				<mx:RadioButton x="10" y="62" label="Bom" groupName="radiogroup1" id="idBom" value="Bom"/>
+				<mx:RadioButton x="10" y="88" label="Moderado" groupName="radiogroup1" id="idModerado" value="Moderado"/>
+				<mx:RadioButton x="10" y="114" label="Ruim" groupName="radiogroup1" id="idRuim" value="Ruim"/>
+				<mx:Button x="82.5" y="157" label="Salvar" width="124" fontWeight="bold" id="btnEnqueteSalvar" click="btnEnquenteClick()"/>
+			</mx:Panel>
+		</mx:Canvas>
+		<mx:Canvas label="REGISTRE-SE" width="100%" height="100%" id="pCadastrese">     
+			<mx:Label x="10" y="5" text="* - Nome completo:" fontWeight="bold" fontSize="12"/>
+			<mx:TextInput x="10" y="22" width="309" maxChars="50" id="txtCadastreseNomeCompleto"/>
+			<mx:Label x="10" y="48" text="* - E-Mail:" fontWeight="bold" fontSize="12"/>
+			<mx:TextInput x="10" y="64" width="309" maxChars="60" id="txtCadastreseEmail"/>
+			<mx:Label x="10" y="94" text="* - Telefone:" fontWeight="bold" fontSize="12"/>
+			<mx:TextInput x="10" y="112" width="309" id="txtCadastreseTelefone" maxChars="14"/>
+			<mx:Label x="10" y="142" text="Celular:" fontWeight="bold" fontSize="12"/>
+			<mx:TextInput x="10" y="159" width="309" id="txtCadastreseCelular" maxChars="14"/>
+			<mx:Label x="10" y="188" text="Skype:" fontWeight="bold" fontSize="12"/>
+			<mx:TextInput x="10" y="206" width="309" id="txtCadastreseSkype" maxChars="60"/>
+			<mx:Label x="10" y="236" text="* - Senha:" fontWeight="bold" fontSize="12"/>
+			<mx:TextInput x="10" y="254" width="309" id="txtCadastreseSenha" maxChars="20" displayAsPassword="true"/>
+			<mx:Label x="10" y="280" text="* - Confirmar senha:" fontWeight="bold" fontSize="12"/>
+			<mx:TextInput x="10" y="297" width="309" id="txtCadastreseConfirmarSenha" maxChars="20" displayAsPassword="true"/>
+			<mx:Button x="92" y="327" label="Salvar Registro" width="145" id="btnCadastrar" fontWeight="bold" fontSize="12" click="btnClick_RegistraSe()"/>
+		</mx:Canvas>
+		<mx:Canvas label="FALE CONOSCO" width="100%" height="100%" id="pFaleConosco">
+			<mx:Label x="10" y="10" text="* - Nome:" fontWeight="bold" fontSize="12"/>
+			<mx:TextInput x="10" y="27" width="309" id="txtFaleConoscoNome" maxChars="30"/>
+			<mx:Label x="10" y="57" text="* - Telefone:" fontWeight="bold" fontSize="12"/>
+			<mx:TextInput x="10" y="74" width="309" maxChars="14" id="txtFaleConoscoTelefone"/>
+			<mx:Label x="10" y="104" text="* - E-Mail:" fontWeight="bold" fontSize="12"/>
+			<mx:TextInput x="10" y="122" width="309" id="txtFaleConoscoEmail" maxChars="60"/>
+			<mx:Label x="10" y="152" text="* - Assunto:" fontWeight="bold" fontSize="12"/>
+			<mx:TextArea x="10" y="170" width="309" height="152" id="txtFaleConoscoAssunto"/>
+			<mx:Button x="73" y="330" label="Enviar" width="165" fontWeight="bold" id="btnFaleConoscoEnviar" fontSize="12" click="btnClick_EnviarFaleConosco()"/>
+		</mx:Canvas>
+	</mx:TabNavigator>
+	<mx:Panel x="471" y="10" width="855" height="789" layout="absolute" id="pTITULOPC" fontSize="11">
+		<mx:title>PROFISSIONAL FREELANCER - PAULO AUGUSTO - DESENVOLVIMENTO DE APLICATIVOS DESKTOP E PÁGINAS WEB</mx:title>
+	</mx:Panel>
+	
+</mx:Application>
