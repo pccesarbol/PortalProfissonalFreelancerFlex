@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
 	             layout="absolute" height="100%" width="1772" horizontalAlign="center" verticalAlign="top" fontFamily="Verdana" backgroundGradientAlphas="[1.0, 1.0]" 
-	             backgroundGradientColors="[#E5E69B, #1D474A]" x="50" y="21" borderColor="#59136D" color="#010209" borderStyle="none">	             
+	             backgroundGradientColors="[#E5E69B, #1D474A]" x="50" y="21" borderColor="#59136D" color="#010209" borderStyle="none">	
+	                          
 	 <mx:RemoteObject id="registrarid" destination="RegistrarClienteFacade" fault="OnFault(event)">
-	  	<mx:method name="autenticarUsuario" result="OnResult(event)"/>
+	  	<mx:method name="autenticarUsuario" result="OnResultadoJava(event)"/>
 	  	<mx:method name="autenticarUsuarioADM" result="OnResult(event)"/>
 	  	<mx:method name="enviarFaleConosco" result="OnResult(event)"/>
 	  	<mx:method name="registrarNovoCliente" result="OnResult(event)"/>	
@@ -13,6 +14,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import fontes.vo.RetornoJavaVO;
 			import mx.events.CloseEvent;
 			import mx.managers.FocusManager;
 			import mx.rpc.events.FaultEvent;
@@ -26,6 +28,10 @@
 			//-- Tratando o set focus --//
 		    private var ignoreFocusChange:Boolean = false;
             private var focusTargetOnReturn: IFocusManagerComponent;
+            private var resposta:String;
+            
+ [Blindable]           
+ private var vo:RetornoJavaVO = null;           
 			
 			/**
 			 * Tratando o focus dos campos de alerta.
@@ -38,19 +44,48 @@
 	        }	
 						
 			protected function OnResult(e:ResultEvent):void{
-			  Alert.show(e.result.toString());
+			  	 Alert.show(e.result.toString());				  
 			}
 			
 			protected function OnFault(e:FaultEvent):void{
 			  Alert.show(e.fault.message.toString());
 			}
 			
+/**
+ * Tratando a autenticação do usuário este método inicializa 
+ * o objeto VO após chamada do método autenticarUsuario abaixo.
+ * Autor: Paulo Augusto
+ * Data: 02/08/2013 as 17hs19min.
+ * **/			
+protected function OnResultadoJava(e:ResultEvent):void{ 	
+	vo = null;
+    vo = e.result as fontes.vo.RetornoJavaVO;
+    
+    if(vo.retorno == "true"){
+   	  this.txtEmail.text   = "";     
+   	  this.txtSenha.text   = "";
+   	  
+   	  if(!pAreaClienteAdministrar.visible){
+   	     pAreaClienteAdministrar.visible = true
+   	  }
+   	  
+     }else{
+     	  if(pAreaClienteAdministrar.visible){     
+         	pAreaClienteAdministrar.visible = false;
+         }	
+         focusManager.setFocus(txtEmail);
+       focusTargetOnReturn = focusManager.getFocus(); 
+         Alert.show("Atenção! O usuário informado não esta cadastrado no sistema, registre-se.");
+     }						 	
+					   	  		
+     
+}			
 			/**
 			 * Realizar a autenticação na área do cliente
 			 * Autor: Paulo Augusto
 			 * Data: 29/07/2013 as 10hs04min
 			 * **/
-			protected function autenticarUsuario():void{
+			protected function autenticarUsuario():void{				
 				if(!ignoreFocusChange){	               
 	                
 	                 if(this.txtEmail.text.length < 10){
@@ -63,10 +98,8 @@
 					 	  focusTargetOnReturn = focusManager.getFocus();
 					   	  Alert.show("Atenção! Informe a sua Senha é obrigatório ","", 0, null, myCloseHandler);
 					   	  
-					 }else{ 	
-					   	  registrarid.autenticarUsuario(this.txtEmail.text, this.txtSenha.text);
-					   	  this.txtEmail.text   = "";
-					   	  this.txtSenha.text   = "";
+					 }else{	
+					    registrarid.autenticarUsuario(this.txtEmail.text, this.txtSenha.text);
 					 }		               
 	             }
 			}
@@ -142,6 +175,8 @@
 			 * Data: 11hs11min
 			 * **/
 			 protected function btnClick_RegistraSe():void{
+			 	var registrou:Boolean = false;
+			 	
 			    if(!ignoreFocusChange){	               
 	                
 	                 if(this.txtCadastreseNomeCompleto.text.length < 8){
@@ -169,7 +204,12 @@
 					 	  focusTargetOnReturn = focusManager.getFocus();
 					   	  Alert.show("Atenção! Confirme a sua Senha é obrigatório ","", 0, null, myCloseHandler);
 					   	  
-					 }else{ 	
+					 }else if(this.txtCadastreseSenha.text != this.txtCadastreseConfirmarSenha.text){
+					 	focusManager.setFocus(txtCadastreseSenha);
+					 	focusTargetOnReturn = focusManager.getFocus();
+					    Alert.show("Atenção! A senha esta diferente do confirmar senha, corrija.");
+					 	
+			         }else{
 					   	  registrarid.registrarNovoCliente(txtCadastreseNomeCompleto.text, txtCadastreseCelular.text, txtCadastreseConfirmarSenha.text,
 					   	                                   txtCadastreseEmail.text, txtCadastreseSenha.text, txtCadastreseSkype.text, txtCadastreseTelefone.text);					   	   
 					   	                                   
@@ -180,7 +220,10 @@
 					   	  txtCadastreseSenha.text			= "";
 					   	  txtCadastreseSkype.text           = "";
 					   	  txtCadastreseTelefone.text        = ""; 
-					 }		               
+					   	  
+					   	  focusManager.setFocus(txtCadastreseNomeCompleto);
+					 	  focusTargetOnReturn = focusManager.getFocus();				   	  
+					 }	             
 	             }
 			 }
 			 /**
@@ -340,7 +383,7 @@
 				<mx:Button x="73" y="330" label="Enviar" width="165" fontWeight="bold" id="btnFaleConoscoEnviar" fontSize="12" click="btnClick_EnviarFaleConosco()" fillColors="[#051253, #580C0C]" color="#EFF0F6" fillAlphas="[1.0, 1.0, 1.0, 1.0]"/>
 			</mx:Canvas>
 		</mx:TabNavigator>
-		<mx:Panel width="331" height="193" layout="absolute" title="ÁREA ADMINISTRATIVA - WEBDEVELOPER" id="btnAreaADM" click="autenticarUsuarioADM" borderColor="#9FA35F">
+		<mx:Panel width="331" height="193" layout="absolute" title="ÁREA ADMINISTRATIVA - WEBDEVELOPER" id="btnAreaADM" click="autenticarUsuarioADM" borderColor="#9FA35F" color="#0D1213">
 			<mx:Label x="10" y="10" text="* - E-Mail:" fontWeight="bold" fontSize="12"/>
 			<mx:TextInput x="10" y="29" width="291" maxChars="60" id="txtEmailAdm"/>
 			<mx:Label x="10" y="63" text="* - Senha:" fontWeight="bold" fontSize="12"/>
@@ -350,6 +393,16 @@
 	</mx:VBox>
 	<mx:VBox x="571" y="10" height="812" width="532">
 		<mx:Panel width="523" height="800" layout="absolute" id="pPrincipal" title="PROFISSIONA FREELANCER - PAULO AUGUSTO, TEL.: (61) 9119-4490" borderColor="#D1D284" themeColor="#093048">  
+			<mx:Panel x="10" y="19" width="483" height="731" layout="absolute" id="pAreaClienteAdministrar" fontWeight="bold" title="ÁREA DO CLIENTE - ADMINISTRAÇÃO" borderColor="#9DAC7D" visible="false">
+				<mx:SWFLoader x="62" y="35" source="img/add_property-512_.png" width="128" height="126"/>
+				<mx:SWFLoader x="266" y="35" source="img/edit_property-512_.png" width="130" height="126"/>
+				<mx:SWFLoader x="62" y="192" source="img/settings-512.png" width="135" height="126"/>
+				<mx:SWFLoader x="259" y="192" source="img/delete-512.png" width="137" height="126"/>
+				<mx:SWFLoader x="62" y="345" source="img/key-512.png" height="124" width="135"/>
+				<mx:SWFLoader x="259" y="336" source="img/downloading_updates-512.png" width="137" height="133"/>
+				<mx:SWFLoader x="62" y="489" source="img/available_updates-512.png" width="135" height="131"/>
+				<mx:SWFLoader x="259" y="494" source="img/installing_updates-512.png" width="144.5" height="126"/>
+			</mx:Panel>
 		</mx:Panel>
 	</mx:VBox>
 	
