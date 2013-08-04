@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	            xmlns:fc="fontes.extras.controls.*"
 	             layout="absolute" height="100%" width="1772" horizontalAlign="center" verticalAlign="top" fontFamily="Verdana" backgroundGradientAlphas="[1.0, 1.0]" 
 	             backgroundGradientColors="[#E5E69B, #1D474A]" x="50" y="21" borderColor="#59136D" color="#010209" borderStyle="none">	
-	                          
+<!-- Validacao e Mascara Teste do PC-->
+<mx:Script source="as/validation.as"/>
+<mx:Style>
+    MaskedTextInput {
+        font-family: "Courier New";
+        font-size: 16;
+    }
+</mx:Style>	
+
+<mx:StringValidator source="{polNum}" valid="handleValid(event)" property="text" minLength="5" maxLength="5" triggerEvent="focusOut"/>
+<mx:DateValidator source="{dob}" valid="handleValid(event)" property="fullText" triggerEvent="focusOut"/>
+<mx:SocialSecurityValidator source="{ssn}" valid="handleValid(event)" property="text" triggerEvent="focusOut"/>
+
+<!-- FIM  -->	                          
 	 <mx:RemoteObject id="registrarid" destination="RegistrarClienteFacade" fault="OnFault(event)">
 	  	<mx:method name="autenticarUsuario" result="OnResultadoJava(event)"/>
 	  	<mx:method name="autenticarUsuarioADM" result="OnResult(event)"/>
@@ -405,5 +419,15 @@ protected function OnResultadoJava(e:ResultEvent):void{
 			</mx:Panel>
 		</mx:Panel>
 	</mx:VBox>
+	
+	<!-- Teste de campo do mascara -->
+	   <fc:MaskedTextInput id="dob" inputMask="MM/DD/YYYY" autoAdvance="true" 
+        invalid="handleInValid(event)" change="valids.dob = false;" width="200"/>
+       <mx:Image id="errDOB" width="25" height="25" source="@Embed('assets/error.JPG')" visible="false" 
+        toolTip="Enter Valid Date"/>
+        
+        <fc:MaskedTextInput id="date2" inputMask="DD/MM/YYYY"/>
+        
+	<!-- Fim -->
 	
 </mx:Application>
